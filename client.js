@@ -18,6 +18,20 @@ let replicationOptions = {
 };
 
 dbEvents.sync('http://dev.alice.digital:5984/events-test', replicationOptions)
+.on('change', function (info) {
+  console.log('change');// handle change
+}).on('paused', function (err) {
+  console.log('paused', JSON.stringify(err));// replication paused (e.g. replication up to date, user went offline)
+}).on('active', function () {
+  console.log('active');// replicate resumed (e.g. new changes replicating, user went back online)
+}).on('denied', function (err) {
+  console.log('denied');// a document failed to replicate (e.g. due to permissions)
+}).on('complete', function (info) {
+  console.log('complete');// handle complete
+}).on('error', function (err) {
+  console.log('error');// handle error
+});
+
 dbViewModel.sync('http://dev.alice.digital:5984/viewmodel-test', replicationOptions);
 dbResults.sync('http://dev.alice.digital:5984/results-test', replicationOptions);
 
