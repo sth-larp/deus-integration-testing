@@ -18,23 +18,43 @@ let replicationOptions = {
   query_params: { "character": characterId }
 };
 
-dbEvents.sync('http://dev.alice.digital:5984/events-test', replicationOptions)
+let replicationOptions2 = {
+  live: true,
+  continuous: true,
+  retry: true
+};
+
+dbEvents.replicate.to('http://dev.alice.digital:5984/events-test', replicationOptions2)
 .on('change', function (info) {
-  console.log('change');// handle change
+  console.log('dbEvents change');// handle change
 }).on('paused', function (err) {
-  console.log('paused', JSON.stringify(err));// replication paused (e.g. replication up to date, user went offline)
+  console.log('dbEvents paused', JSON.stringify(err));// replication paused (e.g. replication up to date, user went offline)
 }).on('active', function () {
-  console.log('active');// replicate resumed (e.g. new changes replicating, user went back online)
+  console.log('dbEvents active');// replicate resumed (e.g. new changes replicating, user went back online)
 }).on('denied', function (err) {
-  console.log('denied');// a document failed to replicate (e.g. due to permissions)
+  console.log('dbEvents denied');// a document failed to replicate (e.g. due to permissions)
 }).on('complete', function (info) {
-  console.log('complete');// handle complete
+  console.log('dbEvents complete');// handle complete
 }).on('error', function (err) {
-  console.log('error');// handle error
+  console.log('dbEvents error');// handle error
 });
 
-dbViewModel.sync('http://dev.alice.digital:5984/viewmodel-test', replicationOptions);
-dbResults.sync('http://dev.alice.digital:5984/results-test', replicationOptions);
+dbViewModel.replicate.from('http://dev.alice.digital:5984/viewmodel-test', replicationOptions)
+.on('change', function (info) {
+  console.log('dbViewModel change');// handle change
+}).on('paused', function (err) {
+  console.log('dbViewModel paused', JSON.stringify(err));// replication paused (e.g. replication up to date, user went offline)
+}).on('active', function () {
+  console.log('dbViewModel active');// replicate resumed (e.g. new changes replicating, user went back online)
+}).on('denied', function (err) {
+  console.log('dbViewModel denied');// a document failed to replicate (e.g. due to permissions)
+}).on('complete', function (info) {
+  console.log('dbViewModel complete');// handle complete
+}).on('error', function (err) {
+  console.log('dbViewModel error');// handle error
+});
+
+dbResults.replicate.to('http://dev.alice.digital:5984/results-test', replicationOptions2);
 
 Rx.Observable.timer(5000, 5000).timestamp().subscribe(timestamp => {
   console.log("Sending event at ", timestamp);
