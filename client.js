@@ -1,13 +1,14 @@
 let PouchDB = require('pouchdb-node');
+PouchDB.plugin(require('pouchdb-adapter-memory'));
 let Rx = require('rxjs/Rx');
 let uuidV1 = require('uuid/v1');
 
 const characterId = uuidV1();
 console.log(`Using charactedId: ${characterId}`);
 
-let dbEvents = new PouchDB(`events-${characterId}`);
-let dbViewModel = new PouchDB(`viewmodel-${characterId}`);
-let dbResults = new PouchDB(`results-${characterId}`);
+let dbEvents = new PouchDB(`events-${characterId}`,  {adapter: 'memory'});
+let dbViewModel = new PouchDB(`viewmodel-${characterId}`,  {adapter: 'memory'});
+let dbResults = new PouchDB(`results-${characterId}`, {adapter: 'memory'});
 
 let replicationOptions = {
   live: true,
