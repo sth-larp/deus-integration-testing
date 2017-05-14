@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/sth-larp/deus-integration-testing#readme",
   "dependencies": {
+    "loglevel": "^1.4.1",
     "pouchdb-adapter-memory": "^6.2.0",
     "pouchdb-node": "^6.1.2",
     "rxjs": "^5.3.0",

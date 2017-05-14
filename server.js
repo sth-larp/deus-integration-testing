@@ -1,6 +1,8 @@
 let PouchDB = require('pouchdb-node');
 let Rx = require('rxjs/Rx');
+let log = require('loglevel');
 
+log.setLevel(log.levels.INFO);
 
 let dbEvents = new PouchDB(`http://dev.alice.digital:5984/events-test`);
 let dbViewModel = new PouchDB(`http://dev.alice.digital:5984/viewmodel-test`);
@@ -20,7 +22,7 @@ cleanDB(dbEvents)
   .then(() => { return cleanDB(dbViewModel); })
   .then(() => { return cleanDB(dbResults); })
   .then(() => {
-    console.log("cleaned old stuff, waiting for new events");
+    log.info("cleaned old stuff, waiting for new events");
     let eventsUpdates = Rx.Observable.create(observer => {
       let changesStream = dbEvents.changes({ live: true, since: 'now', include_docs: true });
       changesStream.on('change', change => {
@@ -31,22 +33,22 @@ cleanDB(dbEvents)
 
     eventsUpdates.subscribe(doc => {
       if (doc._deleted) {
-        console.log("skipping deleted doc");
+        log.debug("skipping deleted doc");
         return []
       };
-      console.log("Received event: ", JSON.stringify(doc));
+      log.debug("Received event: ", JSON.stringify(doc));
       return dbViewModel.get(doc.character)
         .then(viewdoc => {
-          console.log("Existing viewdoc: ", JSON.stringify(viewdoc));
+          log.debug("Existing viewdoc: ", JSON.stringify(viewdoc));
           viewdoc.timestamp = doc.timestamp;
           dbViewModel.put(viewdoc);
           dbEvents.remove(doc._id, doc._rev);
         })
         .catch(() => {
-          console.log("Initializing viewdoc: ", JSON.stringify(doc));
+          log.debug("Initializing viewdoc: ", JSON.stringify(doc));
           return dbViewModel.put({ _id: doc.character, character: doc.character, timestamp: doc.timestamp });
         })
-        .catch(err => {console.error("error:", JSON.stringify(err))});
+        .catch(err => {log.error("error:", JSON.stringify(err))});
     });
 
   });
