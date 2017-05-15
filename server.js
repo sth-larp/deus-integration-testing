@@ -4,9 +4,9 @@ let log = require('loglevel');
 
 log.setLevel(log.levels.INFO);
 
-let dbEvents = new PouchDB(`http://dev.alice.digital:5984/events-test`);
-let dbViewModel = new PouchDB(`http://dev.alice.digital:5984/viewmodel-test`);
-let dbResults = new PouchDB(`http://dev.alice.digital:5984/results-test`);
+let dbEvents = new PouchDB(`http://10.254.1.130:5984/events-test`);
+let dbViewModel = new PouchDB(`http://10.254.1.130:5984/viewmodel-test`);
+let dbResults = new PouchDB(`http://10.254.1.130:5984/results-test`);
 
 function cleanDB(db) {
   return db.allDocs().then(function (result) {

@@ -31,7 +31,7 @@ let replicationOptions2 = {
   retry: true
 };
 
-dbEvents.replicate.to('http://dev.alice.digital:5984/events-test', replicationOptions2)
+dbEvents.replicate.to('http://10.254.1.130:5984/events-test', replicationOptions2)
 .on('change', function (info) {
   log.debug('dbEvents change');// handle change
 }).on('paused', function (err) {
@@ -46,7 +46,7 @@ dbEvents.replicate.to('http://dev.alice.digital:5984/events-test', replicationOp
   log.error('dbEvents error');// handle error
 });
 
-dbViewModel.replicate.from('http://dev.alice.digital:5984/viewmodel-test', replicationOptions)
+dbViewModel.replicate.from('http://10.254.1.130:5984/viewmodel-test', replicationOptions)
 .on('change', function (info) {
   log.debug('dbViewModel change');// handle change
 }).on('paused', function (err) {
@@ -61,7 +61,7 @@ dbViewModel.replicate.from('http://dev.alice.digital:5984/viewmodel-test', repli
   log.error('dbViewModel error');// handle error
 });
 
-dbResults.replicate.to('http://dev.alice.digital:5984/results-test', replicationOptions2);
+dbResults.replicate.to('http://10.254.1.130:5984/results-test', replicationOptions2);
 
 Rx.Observable.timer(5000, 5000).timestamp().subscribe(timestamp => {
   log.debug("Sending event at ", timestamp);
