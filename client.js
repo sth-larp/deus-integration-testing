@@ -4,7 +4,7 @@ let Rx = require('rxjs/Rx');
 let uuidV1 = require('uuid/v1');
 let log = require('loglevel');
 
-log.setLevel(log.levels.INFO);
+log.setLevel(log.levels.DEBUG);
 
 function now() {
   return new Date().valueOf();
@@ -15,7 +15,7 @@ log.info(`Using charactedId: ${characterId}`);
 
 let dbEvents = new PouchDB(`events-${characterId}`,  {adapter: 'memory'});
 let dbViewModel = new PouchDB(`viewmodel-${characterId}`,  {adapter: 'memory'});
-let dbResults = new PouchDB(`results-${characterId}`, {adapter: 'memory'});
+//let dbResults = new PouchDB(`results-${characterId}`, {adapter: 'memory'});
 
 let replicationOptions = {
   live: true,
@@ -61,9 +61,9 @@ dbViewModel.replicate.from('http://10.254.1.130:5984/viewmodel-test', replicatio
   log.error('dbViewModel error');// handle error
 });
 
-dbResults.replicate.to('http://10.254.1.130:5984/results-test', replicationOptions2);
+//dbResults.replicate.to('http://10.254.1.130:5984/results-test', replicationOptions2);
 
-Rx.Observable.timer(5000, 5000).timestamp().subscribe(timestamp => {
+Rx.Observable.timer(10000, 120000).timestamp().subscribe(timestamp => {
   log.debug("Sending event at ", timestamp);
   dbEvents.post({
 /*    some_junk_payload_to_increase_size:  `Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
@@ -73,6 +73,7 @@ Rx.Observable.timer(5000, 5000).timestamp().subscribe(timestamp => {
                                          in reprehenderit in voluptate velit esse cillum dolore eu fugiat
                                          nulla pariatur. Excepteur sint occaecat cupidatat non proident,
                                          sunt in culpa qui officia deserunt mollit anim id est laborum`,*/
+    value: timestamp.value,
     timestamp: timestamp.timestamp,
     character: characterId
   })
@@ -86,12 +87,12 @@ let maxTimestampDifference = -1;
 let reportMaxTimestampDifference = (diff) => {
   log.info("Now max diff is ", diff);
   maxTimestampDifference = diff;
-  dbResults.get(characterId)
+  /*dbResults.get(characterId)
     .then(doc => {
       doc.diff = maxTimestampDifference;
       dbResults.put(doc);
     })
-    .catch(() => dbResults.put({ _id: characterId, character: characterId, diff: maxTimestampDifference }));
+    .catch(() => dbResults.put({ _id: characterId, character: characterId, diff: maxTimestampDifference }));*/
 };
 
 let lastTimeStamp = now();

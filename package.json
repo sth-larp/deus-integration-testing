@@ -5,7 +5,9 @@
   "main": "client.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "scripts/startServer.sh",
+    "startClients": "scripts/startClients.sh",
+    "clearLogs": "rm -Rf logs/*"
   },
   "repository": {
     "type": "git",
