@@ -2,7 +2,7 @@ let PouchDB = require('pouchdb-node');
 let Rx = require('rxjs/Rx');
 let log = require('loglevel');
 
-log.setLevel(log.levels.INFO);
+log.setLevel(log.levels.DEBUG);
 
 let dbEvents = new PouchDB(`http://10.254.1.130:5984/events-test`);
 let dbViewModel = new PouchDB(`http://10.254.1.130:5984/viewmodel-test`);
