@@ -20,11 +20,17 @@ let maxLatency = 0;
 let totalLatency = 0;
 let totalRequests = 0;
 
+function suffix(n: number) {
+  n = n % 100;
+  if (n < 10) return '0' + n.toString();
+  return n.toString();
+}
+
 async function sendEvent() {
   const tsBefore = new Date().valueOf();
   totalRequests += 1;
-  const username = usernamePrefix + (totalRequests % 10).toString();
-  const response = await rp.post('http://dev.magellan2018.ru:8157/events/' + username,
+  const username = usernamePrefix + suffix(totalRequests);
+  const response = await rp.post('http://35.234.75.234:8157/events/' + username,
     {
       resolveWithFullResponse: true, simple: false,
       json: { events: [{ eventType: '_RefreshModel', timestamp: new Date().valueOf() }] },
