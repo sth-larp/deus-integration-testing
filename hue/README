@@ -1,0 +1,16 @@
+Find bridges:
+https://www.meethue.com/api/nupnp
+id --> ip
+
+Users:
+001788fffe1a2d42 --> EubEbOHfQ1GBTiNpSj9YVUI9i3LsHqG2wSy1FnB9
+
+API:
+https://www.developers.meethue.com/documentation/lights-api
+
+Examples:
+BRIDGE_IP=192.168.178.68
+curl --header "Content-Type: application/json"   --request PUT   --data '{"on": true}' http://$BRIDGE_IP/api/EubEbOHfQ1GBTiNpSj9YVUI9i3LsHqG2wSy1FnB9/lights/1/state
+curl --header "Content-Type: application/json"   --request PUT   --data '{"on": false}' http://$BRIDGE_IP/api/EubEbOHfQ1GBTiNpSj9YVUI9i3LsHqG2wSy1FnB9/lights/1/state
+curl --header "Content-Type: application/json"   --request PUT   --data '{"on": true, "hue": 56100, "sat": 254 }' http://$BRIDGE_IP/api/EubEbOHfQ1GBTiNpSj9YVUI9i3LsHqG2wSy1FnB9/lights/1/state
+curl --header "Content-Type: application/json"   --request PUT   --data '{"on": true, "hue": 12750, "sat": 254, "transitiontime": 100}' http://$BRIDGE_IP/api/EubEbOHfQ1GBTiNpSj9YVUI9i3LsHqG2wSy1FnB9/lights/1/state
